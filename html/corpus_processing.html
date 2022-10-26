@@ -13077,7 +13077,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="French-adverbials-and-subjuntive-use">French adverbials and subjuntive use<a class="anchor-link" href="#French-adverbials-and-subjuntive-use">&#182;</a></h1><p>Juan Berrios | juanberrios@pitt.edu | Last updated: April 23, 2021</p>
+<h1 id="French-adverbials-and-subjuntive-use">French adverbials and subjuntive use<a class="anchor-link" href="#French-adverbials-and-subjuntive-use">&#182;</a></h1><p>Juan Berrios | juanberrios@pitt.edu | Last updated: October 26, 2022</p>
 
 </div>
 </div>
@@ -13094,7 +13094,7 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>This is part of a project of mood variation conditioned by adverbials in French as spoken in Metropolitan France. The purpose of the code included in this notebook is to build a <code>DataFrame</code> object from the <code>.txt</code> file containing the entirety of the Corpus de Français Parlé Parisien (CFPP2000). </li>
+<li>This notebook is part of a project on mood variation as conditioned by adverbials in French as spoken in Metropolitan France. The purpose of the code included in this notebook is to build a <code>DataFrame</code> object from the <code>.txt</code> file containing the entirety of the <em>Corpus de Français Parlé Parisien</em> (CFPP2000). </li>
 </ul>
 
 </div>
@@ -13106,8 +13106,8 @@ div#notebook {
 <p><strong>Contents:</strong></p>
 <ol>
 <li><a href="#1.-Preparation">Preparation</a>  includes the necessary preparations.</li>
-<li><a href="#2.-Loading-files">Loading files</a>  includes code for loading the files, turning them into a data frame, and cleaning them using one of the <code>.txt</code> files as a sample.</li>
-<li><a href="#3.-Processing-corpus-directories">Processing corpus directories</a>  includes code for performing the operations on a corpus directory containing all the text files for Argentinean Spanish. The resulting data frames is stored as a <code>.pkl</code> file in case further processing is needed.</li>
+<li><a href="#2.-Corpus-processing">Corpus processing</a>  includes code for loading the files, turning them into a data frame, and cleaning them using one of the <code>.txt</code> files as a sample.</li>
+<li><a href="#3.-Data-frame-building">Data frame building</a>  includes code for performing operations on the processed corpus to turn the data into a manageable data frame. The resulting data frame is stored as a <code>.pkl</code> file in case further processing is needed.</li>
 </ol>
 
 </div>
@@ -13173,7 +13173,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="2.-Loading-files">2. Loading files<a class="anchor-link" href="#2.-Loading-files">&#182;</a></h2>
+<h2 id="2.-Corpus-processing">2. Corpus processing<a class="anchor-link" href="#2.-Corpus-processing">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -13181,7 +13181,7 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>I'm going to first load the <code>.txt</code> file by lines. Then process it so that I get lines that are only dialogue rather than tags (starting with "&lt;"). The last step will be to extract concordances containing the adverbails of interest ("quand", "tandis que", "avant" que", "jusqu'à ce que").</li>
+<li>I'm going to first load the <code>.txt</code> file by lines. Then process it so that I get lines that are only speech rather than tags (starting with "&lt;"). The last step will be to extract concordances containing the adverbails of interest ("<em>quand</em>", "<em>tandis que</em>", "<em>avant que</em>", "<em>jusqu'à ce que</em>").</li>
 </ul>
 
 </div>
@@ -13230,7 +13230,7 @@ div#notebook {
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Verifying results</span>
 
-<span class="nb">len</span><span class="p">(</span><span class="n">concordances</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There are:&quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">concordances</span><span class="p">),</span><span class="s2">&quot;concordances.&quot;</span><span class="p">)</span>
 
 <span class="c1">#Sample of first ten lines</span>
 
@@ -13248,24 +13248,12 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[4]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>189845</pre>
-</div>
-
-</div>
-
-<div class="output_area">
-
     <div class="prompt"></div>
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>---Sample---
+<pre>There are: 189845 concordances.
+---Sample---
 &lt;quartier=&#34;03&#34;&gt;
 &lt;transc=&#34;03-01&#34;&gt;
 &lt;user=&#34;Ozgur_Kilic_H_32_alii_3e (1)&#34;&gt;
@@ -13284,17 +13272,27 @@ vous l&#39;avez entendue deux fois ça suffit §
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>As can be seen from the sample, there are tags related to matters such as the speaker or the location where the data were collected. As we're mainly interested on the speech for this task, we'll remove the tags and keep only speech tokens:</li>
+</ul>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Extract tokens only (no tags)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Extract only speech (no tags)</span>
 
 <span class="n">tokens</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">concordances</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span>            <span class="c1">#Starts with &quot;&lt;&quot;</span>
+    <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span>            <span class="c1">#Line does not start with &quot;&lt;&quot;</span>
         <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 </pre></div>
 
@@ -13310,7 +13308,7 @@ vous l&#39;avez entendue deux fois ça suffit §
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Verifying result</span>
 
-<span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There are:&quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">),</span><span class="s2">&quot;concordances.&quot;</span><span class="p">)</span>
 
 <span class="c1">#Sample</span>
 
@@ -13328,24 +13326,12 @@ vous l&#39;avez entendue deux fois ça suffit §
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[6]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>91714</pre>
-</div>
-
-</div>
-
-<div class="output_area">
-
     <div class="prompt"></div>
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>---Sample---
+<pre>There are: 91714 concordances.
+---Sample---
 vous pouvez la reposer encore si vous voulez §
 non  §
 vous l&#39;avez entendue deux fois ça suffit §
@@ -13364,21 +13350,31 @@ là avec Steve bah c&#39;est mon frère donc euh tchk §
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>We'll now build individual lists for adverbs of interest. Now that there is a list for regular spelling and another list for alternative (contracted or capital case) spellings:</li>
+</ul>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Build individual lists for adverbs of interest</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Regular</span>
 
 <span class="n">avant</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="s2">&quot;avant que&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
 <span class="n">tandis</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="s1">&#39;tandis que&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
 <span class="n">jusque</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="s2">&quot;jusqu&#39;à ce que&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
 <span class="n">quand</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="s2">&quot;quand&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
 
-<span class="c1">#Build individual lists for adverbs of interest</span>
+<span class="c1">#Alternative</span>
 
-<span class="n">avant_alt</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="s2">&quot;avant qu&#39;&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>        <span class="c1">#A note here to make this more efficient later</span>
+<span class="n">avant_alt</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="s2">&quot;avant qu&#39;&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>        
 <span class="n">tandis_alt</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="s2">&quot;tandis qu&#39;&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
 <span class="n">jusque_alt</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="s2">&quot;jusqu&#39;à ce qu&#39;&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
 <span class="n">quand_alt</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="s2">&quot;Quand&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
@@ -13550,7 +13546,7 @@ là avec Steve bah c&#39;est mon frère donc euh tchk §
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Let's clean up "quand" a little bit since aboout half of the list is made up of the expression "quand même".</li>
+<li>Let's clean up "quand" a little bit since aboout half of the list is made up of the expression "quand même", which doesn't correspond to the construction of interest:</li>
 </ul>
 
 </div>
@@ -13741,7 +13737,7 @@ quand on était petits  §
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="3.-Processing-corpus-directories">3. Processing corpus directories<a class="anchor-link" href="#3.-Processing-corpus-directories">&#182;</a></h2>
+<h2 id="3.-Data-frame-building">3. Data frame building<a class="anchor-link" href="#3.-Data-frame-building">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -13801,10 +13797,10 @@ quand on était petits  §
 <div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Tagging for the most common categories that I will later modify manually</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Tagging for corpus and mood (using the indicative as a default, which will be revised later in manual coding)</span>
 
-<span class="n">adverbials_df</span><span class="p">[</span><span class="s2">&quot;mood&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;indicative&quot;</span> 
 <span class="n">adverbials_df</span><span class="p">[</span><span class="s2">&quot;corpus&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;CFPP200&quot;</span>
+<span class="n">adverbials_df</span><span class="p">[</span><span class="s2">&quot;mood&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;indicative&quot;</span> 
 </pre></div>
 
     </div>
@@ -13857,8 +13853,8 @@ quand on était petits  §
       <th></th>
       <th>concordance</th>
       <th>adverbial</th>
-      <th>mood</th>
       <th>corpus</th>
+      <th>mood</th>
     </tr>
   </thead>
   <tbody>
@@ -13866,36 +13862,36 @@ quand on était petits  §
       <th>0</th>
       <td>avant que ça  §</td>
       <td>avant que</td>
-      <td>indicative</td>
       <td>CFPP200</td>
+      <td>indicative</td>
     </tr>
     <tr>
       <th>1</th>
       <td>avant que Casino prenne la place à l'époque où...</td>
       <td>avant que</td>
-      <td>indicative</td>
       <td>CFPP200</td>
+      <td>indicative</td>
     </tr>
     <tr>
       <th>2</th>
       <td>pas avant plusieurs années   pas avant que ça ...</td>
       <td>avant que</td>
-      <td>indicative</td>
       <td>CFPP200</td>
+      <td>indicative</td>
     </tr>
     <tr>
       <th>3</th>
       <td>avant que ce soit rendu à la ville dans les an...</td>
       <td>avant que</td>
-      <td>indicative</td>
       <td>CFPP200</td>
+      <td>indicative</td>
     </tr>
     <tr>
       <th>4</th>
       <td>et voyez malgré tout euh on s'en sort mais on ...</td>
       <td>avant que</td>
-      <td>indicative</td>
       <td>CFPP200</td>
+      <td>indicative</td>
     </tr>
     <tr>
       <th>...</th>
@@ -13908,36 +13904,36 @@ quand on était petits  §
       <th>1755</th>
       <td>quand on y est depuis septembre 2003   donc ça...</td>
       <td>quand</td>
-      <td>indicative</td>
       <td>CFPP200</td>
+      <td>indicative</td>
     </tr>
     <tr>
       <th>1756</th>
       <td>et dans une famille communisante on allait voi...</td>
       <td>quand</td>
-      <td>indicative</td>
       <td>CFPP200</td>
+      <td>indicative</td>
     </tr>
     <tr>
       <th>1757</th>
       <td>ah Quand passent  §</td>
       <td>quand</td>
-      <td>indicative</td>
       <td>CFPP200</td>
+      <td>indicative</td>
     </tr>
     <tr>
       <th>1758</th>
       <td>ah Quand passent les  §</td>
       <td>quand</td>
-      <td>indicative</td>
       <td>CFPP200</td>
+      <td>indicative</td>
     </tr>
     <tr>
       <th>1759</th>
       <td>on allait voir euh Quand- on avait été voir Qu...</td>
       <td>quand</td>
-      <td>indicative</td>
       <td>CFPP200</td>
+      <td>indicative</td>
     </tr>
   </tbody>
 </table>

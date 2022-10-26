@@ -11,9 +11,8 @@ desktop.ini
 #------------------ directories to ignore
 temp/
 .ipynb_checkpoints/
-rbrul/
 data/
-html/
+private/
 #------------------ saved data files
 *.pkl
 
